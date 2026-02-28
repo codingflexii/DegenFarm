@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import FarmScreen from './src/screens/FarmScreen';
 import UpgradeScreen from './src/screens/UpgradeScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
+import LeaderboardScreen from './src/screens/LeaderboardScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,15 +19,15 @@ export default function App() {
   }, []);
 
   const checkOnboarding = async () => {
-      const done = await AsyncStorage.getItem('onboarded');
-      const savedCharacter = await AsyncStorage.getItem('character');
-      if (done === 'true' && savedCharacter) {
-        setCharacter(JSON.parse(savedCharacter));
-        setOnboarded(true);
-      } else {
-        setOnboarded(false);
-      }
-    };
+    const done = await AsyncStorage.getItem('onboarded');
+    const savedCharacter = await AsyncStorage.getItem('character');
+    if (done === 'true' && savedCharacter) {
+      setCharacter(JSON.parse(savedCharacter));
+      setOnboarded(true);
+    } else {
+      setOnboarded(false);
+    }
+  };
 
   if (onboarded === null) return null;
 
@@ -60,6 +61,13 @@ export default function App() {
           component={FarmScreen}
           options={{
             tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>🌾</Text>,
+          }}
+        />
+        <Tab.Screen
+          name="Leaderboard"
+          component={LeaderboardScreen}
+          options={{
+            tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>🏆</Text>,
           }}
         />
         <Tab.Screen

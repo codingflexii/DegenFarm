@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { supabase } from '../utils/supabase';
 
 export default function FarmScreen() {
   const [seeds, setSeeds] = useState(0);
@@ -89,6 +90,18 @@ export default function FarmScreen() {
 
     await AsyncStorage.setItem('seeds', newTotal.toString());
     await AsyncStorage.setItem('lastHarvest', now.toISOString());
+
+    const username = await AsyncStorage.getItem('username');
+    if (username) {
+      await supabase
+        .from('players')
+        .update({
+          total_seeds: Math.floor(newTotal),
+          streak: newStreak,
+          updated_at: now.toISOString(),
+        })
+        .eq('username', username);
+    }
   };
 
   const getStreakEmoji = () => {
