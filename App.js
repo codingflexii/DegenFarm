@@ -59,6 +59,7 @@ export default function App() {
         <Tab.Screen
           name="Farm"
           component={FarmScreen}
+          initialParams={{ character }}
           options={{
             tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>🌾</Text>,
           }}
@@ -73,6 +74,7 @@ export default function App() {
         <Tab.Screen
           name="Upgrades"
           component={UpgradeScreen}
+          initialParams={{ character }}
           options={{
             tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 20 }}>⚡</Text>,
           }}
