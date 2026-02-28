@@ -18,15 +18,15 @@ export default function App() {
   }, []);
 
   const checkOnboarding = async () => {
-    const done = await AsyncStorage.getItem('onboarded');
-    const savedCharacter = await AsyncStorage.getItem('character');
-    if (done === 'true' && savedCharacter) {
-      setCharacter(JSON.parse(savedCharacter));
-      setOnboarded(true);
-    } else {
-      setOnboarded(false);
-    }
-  };
+      const done = await AsyncStorage.getItem('onboarded');
+      const savedCharacter = await AsyncStorage.getItem('character');
+      if (done === 'true' && savedCharacter) {
+        setCharacter(JSON.parse(savedCharacter));
+        setOnboarded(true);
+      } else {
+        setOnboarded(false);
+      }
+    };
 
   if (onboarded === null) return null;
 

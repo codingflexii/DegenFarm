@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import UsernameScreen from './UsernameScreen';
 
 const CHARACTERS = [
   {
@@ -36,15 +37,10 @@ export default function OnboardingScreen({ onComplete }) {
   const [selected, setSelected] = useState(null);
   const [step, setStep] = useState(1);
 
-  const handleSelect = (character) => {
-    setSelected(character);
-  };
-
-  const handleContinue = async () => {
+  const handleContinueToUsername = async () => {
     if (!selected) return;
     await AsyncStorage.setItem('character', JSON.stringify(selected));
-    await AsyncStorage.setItem('onboarded', 'true');
-    onComplete(selected);
+    setStep(3);
   };
 
   if (step === 1) {
@@ -62,6 +58,20 @@ export default function OnboardingScreen({ onComplete }) {
     );
   }
 
+  if (step === 3) {
+    return (
+      <UsernameScreen
+        character={selected}
+        walletAddress="demo_wallet_address"
+        onComplete={async (username) => {
+          await AsyncStorage.setItem('username', username);
+          await AsyncStorage.setItem('onboarded', 'true');
+          onComplete(selected);
+        }}
+      />
+    );
+  }
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <Text style={styles.title}>Choose Your Farmer</Text>
@@ -74,7 +84,7 @@ export default function OnboardingScreen({ onComplete }) {
             styles.characterCard,
             selected?.id === char.id && { borderColor: char.color, borderWidth: 2 },
           ]}
-          onPress={() => handleSelect(char)}
+          onPress={() => setSelected(char)}
         >
           <Text style={styles.characterEmoji}>{char.emoji}</Text>
           <View style={styles.characterInfo}>
@@ -91,11 +101,11 @@ export default function OnboardingScreen({ onComplete }) {
 
       <TouchableOpacity
         style={[styles.primaryBtn, !selected && styles.primaryBtnDisabled]}
-        onPress={handleContinue}
+        onPress={handleContinueToUsername}
         disabled={!selected}
       >
         <Text style={styles.primaryBtnText}>
-          {selected ? `Start farming as ${selected.name} →` : 'Select a character'}
+          {selected ? `Continue as ${selected.name} →` : 'Select a character'}
         </Text>
       </TouchableOpacity>
     </ScrollView>
